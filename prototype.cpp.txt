@@ -1,0 +1,66 @@
+#include iostream
+#include string
+#includememory
+#includemap
+
+
+ 
+class DbConn
+{
+    stdstring conn;
+    int port;
+    stdstring name;
+   
+    public
+    DbConn(stdstring fname,stdstring fconn, int fport )  name(fname),conn(fconn),port(fport)  {}
+    virtual void connect()=0;
+    virtual void release()=0;
+    virtual  stdunique_ptrDbConn clone()=0;
+    
+};
+
+class Oracle  public DbConn
+{
+    public
+    Oracle(stdstring fname,stdstring fconn, int fport )  DbConn(fname,fconn,fport) {}
+    void connect() { stdcoutlogic to connect db ;}
+    void release() { stdcout release conne; }
+    stdunique_ptrDbConn clone() { 
+        stdunique_ptrDbConn upDbConn= stdmake_uniqueOracle (this);
+        return upDbConn;
+    }    
+    
+};
+
+enum ConnType
+{
+    ORACLE, MONGO 
+};
+
+
+class DbConnFactory
+{
+    stdmap ConnType, stdunique_ptrDbConn  m_conn;
+    
+    public
+    DbConnFactory(stdstring fname,stdstring fconn, int fport)
+    {
+      m_conn[ORACLE]=stdmake_uniqueOracle (oracle,10.10.8.23,2345);
+    }  
+
+    stdunique_ptrDbConn getConn(ConnType ct)
+    {
+        return ( m_conn[ct]-clone());
+    }    
+};
+
+
+
+
+int main()
+{
+    stdunique_ptrDbConnFactory updbcf  =  stdmake_unique DbConnFactory (oracle,10.10.8.23,2345);
+    stdunique_ptrDbConn upDbConn = updbcf-getConn(ORACLE);
+    upDbConn-connect();
+    
+}
